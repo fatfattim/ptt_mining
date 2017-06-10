@@ -45,15 +45,15 @@ X <- toGetRecord("X5")
 stopifnot(X == -50)
 X <- toGetRecord("爆")
 stopifnot(X == 100)
-# ----- Unit test for toGetRecord -----
 
-toGetFamousResult <- function() {
+# ----- Unit test for toGetRecord -----
+toGetFamousResult <- function(pageSize) {
   
   FamousFrame <- data.frame(user= character(0), record = character(0), stringsAsFactors=FALSE)
   FamousFrame[1, ] <- c(NA, NA)
   
-  for( i in (lastPage):lastPage) {
-    tempUrl <- paste0(host, 3510, ".html")
+  for( i in (lastPage-pageSize):lastPage) {
+    tempUrl <- paste0(host, i, ".html")
     html <- htmlParse(getURL(tempUrl, cainfo = signatures))
     tempUrl.list <- unlist(xpathSApply(html, "//div[@class='r-ent']", xmlNode))
     tempUrl.list[which(names(tempUrl.list) %in% c("namespace"))] <- NULL
@@ -82,7 +82,7 @@ toGetFamousResult <- function() {
   return (FamousFrame)
 }
 
-result <- toGetFamousResult()
+result <- toGetFamousResult(20)
 
 #To Do
 #非戰之罪 : cheinshin    □ [新聞] 兆豐銀遭罰57億 曾銘宗：人事空窗期沒人
